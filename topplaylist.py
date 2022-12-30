@@ -2,6 +2,7 @@ from job import JobInterface
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
+
 class TopPlaylist(JobInterface):
     def __init__(self, time_range: str = 'short_term', limit: int = 25, playlist: str = None, description: str = None) -> None:
         """
