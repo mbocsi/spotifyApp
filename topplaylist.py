@@ -4,7 +4,7 @@ from spotipy.oauth2 import SpotifyOAuth
 
 
 class TopPlaylist(JobInterface):
-    def __init__(self, time_range: str = 'short_term', limit: int = 25, playlist: str = None, description: str = None) -> None:
+    def __init__(self, time_range: str = 'short_term', limit: int = 25, playlist: str = None, description: str = None):
         """
         :param time_range: How long ago the algorithm should look for top songs
         :param limit: How many songs should be in the playlist
@@ -29,14 +29,14 @@ class TopPlaylist(JobInterface):
                       'user-top-read'
                       ]
 
-    def run(self) -> None:
+    def run(self):
         sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=self.scope))
         user_id = sp.current_user()['id']
 
         playlist_id = None
         playlists = sp.current_user_playlists()
 
-        for idx, item in enumerate(playlists['items']):
+        for _, item in enumerate(playlists['items']):
             if item['name'] == self.playlist:
                 playlist_id = item['id']
                 break
@@ -48,7 +48,7 @@ class TopPlaylist(JobInterface):
             print('Creating playlist ...')
             sp.user_playlist_create(user=user_id, name=self.playlist, description=self.description)
             playlists = sp.current_user_playlists()
-            for idx, item in enumerate(playlists['items']):
+            for _, item in enumerate(playlists['items']):
                 if item['name'] == self.playlist:
                     playlist_id = item['id']
 

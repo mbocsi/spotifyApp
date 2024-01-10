@@ -5,7 +5,7 @@ import datetime
 
 
 class FreshPlaylist(JobInterface):
-    def __init__(self, original_playlist: str, fresh_playlist: str, duration: int = 30) -> None:
+    def __init__(self, original_playlist: str, fresh_playlist: str, duration: int = 30):
         """
         :param original_playlist: The name of the playlist that the fresh one should be based on
         :param fresh_playlist: The name of the fresh playlist
@@ -23,10 +23,9 @@ class FreshPlaylist(JobInterface):
                       # 'user-top-read'
                       ]
 
-    def run(self) -> None:
+    def run(self):
         """
         The job of the script
-        :return:
         """
         sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=self.scope))
 
@@ -37,7 +36,7 @@ class FreshPlaylist(JobInterface):
         fresh_playlist_id = None
         playlists = sp.current_user_playlists()
 
-        for idx, item in enumerate(playlists['items']):
+        for _, item in enumerate(playlists['items']):
             if item['name'] == self.original_playlist:
                 original_playlist_id = item['id']
             if item['name'] == self.fresh_playlist:
@@ -45,7 +44,6 @@ class FreshPlaylist(JobInterface):
 
         # Double check to make sure that the original playlist was found
         if original_playlist_id:
-            # print('Playlist id: ', playlist_id)
             pass
         else:
             print(f'Playlist not found! -> {self.original_playlist}')
@@ -53,7 +51,6 @@ class FreshPlaylist(JobInterface):
 
         # Double check to make sure the fresh playlist exists, else make it
         if fresh_playlist_id:
-            # print('Playlist id: ', playlist_id)
             pass
         else:
             print(f'Playlist not found! -> {self.fresh_playlist}')
@@ -61,7 +58,7 @@ class FreshPlaylist(JobInterface):
             description = f'A list of songs added to {self.original_playlist} within {self.duration} days.'
             sp.user_playlist_create(user=user_id, name=self.fresh_playlist, description=description)
             playlists = sp.current_user_playlists()
-            for idx, item in enumerate(playlists['items']):
+            for _, item in enumerate(playlists['items']):
                 if item['name'] == self.fresh_playlist:
                     fresh_playlist_id = item['id']
 
@@ -69,15 +66,9 @@ class FreshPlaylist(JobInterface):
         tracks = tracks_in_playlist['items']
 
         items_to_keep = []
-        for idx, item in enumerate(tracks):
+        for _, item in enumerate(tracks):
             added_time = datetime.datetime.strptime(item['added_at'], '%Y-%m-%dT%H:%M:%SZ')
-
-            # print(idx,
-            #       'track: ', item['track']['name'], '-', item['track']['artists'][0]['name'],
-            #       'added at: ', added_time)
-
             delta_time = datetime.datetime.utcnow() - added_time
-            # print('Time since addition: ', delta_time)
             if delta_time <= datetime.timedelta(
                     days=self.duration):  # If the item was added a certain time ago, add to delete list
                 items_to_keep.append(item)
