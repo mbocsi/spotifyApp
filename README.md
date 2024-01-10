@@ -1,12 +1,12 @@
 # Spotify App
 A python package that creates spotify playlists for a user.
 ## Usage
-Create a yaml file with the desired playlist jobs. You can make playlists that contain songs that were added to another playlist within the last N days using `fresh_playlists` and songs that contain your top N songs using `top_playlists`.
+Create a json file with the desired playlist jobs. You can make playlists that contain songs that were added to another playlist within the last N days using `fresh_playlists` and songs that contain your top N songs using `top_playlists`.
 
 Then run:
 
 ```create-playlists [path_to_config.json]```
-### Example config.yaml
+### Example config.json
 ```
 {
     "fresh_playlists": [
