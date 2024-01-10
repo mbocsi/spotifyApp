@@ -1,4 +1,4 @@
-from job import JobInterface
+from spotify_scripts.job import JobInterface
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 

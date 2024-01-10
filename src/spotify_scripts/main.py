@@ -1,6 +1,6 @@
-from freshplaylist import FreshPlaylist
-from topplaylist import TopPlaylist
-from job import JobInterface
+from spotify_scripts.freshplaylist import FreshPlaylist
+from spotify_scripts.topplaylist import TopPlaylist
+from spotify_scripts.job import JobInterface
 from dotenv import load_dotenv
 import argparse
 import json

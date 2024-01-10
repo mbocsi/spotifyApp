@@ -4,9 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "spotify_scripts"
-version = "0.1.0"
+version = "0.1.5"
+authors = [{name="Marton Bocsi", email="mvbocsi@gmail.com"}]
+readme = "README.md"
 description="A python application that creates spotify scripts"
 dependencies = [
     "spotipy",
     "python-dotenv",
 ]
+requires-python = ">=3.10"
+
+[project.scripts]
+create-playlists = "spotify_scripts.main:main"
