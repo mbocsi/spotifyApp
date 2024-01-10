@@ -1,2 +1,5 @@
 spotipy
 python-dotenv
+setuptools
+build
+pytest

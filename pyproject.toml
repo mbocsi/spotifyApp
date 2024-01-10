@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spotify_scripts"
+version = "0.1.0"
+description="A python application that creates spotify scripts"
+dependencies = [
+    "spotipy",
+    "python-dotenv",
+]
