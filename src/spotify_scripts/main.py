@@ -8,11 +8,14 @@ import json
 load_dotenv()
 
 class App:
-    def __init__(self, jobs: list = []):
+    def __init__(self, jobs: list = None):
         """
         :param jobs: A queue of jobs that will be executed on run()
         """
-        self.jobs = jobs
+        if jobs:
+            self.jobs = jobs
+        else:
+            self.jobs = []
 
     def run(self):
         """

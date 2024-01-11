@@ -48,4 +48,4 @@ See `requirements.txt`.
 - SPOTIPY_CLIENT_SECRET = 'client secret'
 - SPOTIPY_REDIRECT_URI = 'uri' (Ex. http://localhost:8000)
 
-May use a `.env` file at project root to deine variables.
+May use a `.env` file at project root to define variables.
