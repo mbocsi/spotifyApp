@@ -3,3 +3,4 @@ python-dotenv
 setuptools
 build
 pytest
+pytest-mock
