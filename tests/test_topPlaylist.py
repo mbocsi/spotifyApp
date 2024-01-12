@@ -1,15 +1,5 @@
 from spotify_scripts.topplaylist import TopPlaylist
-import pytest
 from unittest.mock import patch
-
-@pytest.fixture
-def mock_spotipy():
-    with patch('spotipy.Spotify') as mock_spotipy:
-        mock_spotipy.return_value.current_user.return_value = {"id": 1}
-        mock_spotipy.return_value.current_user_playlists.return_value = {"items": [{'name': 'orig', 'id': 23}, {'name': 'new', 'id': 24}]}
-        mock_spotipy.return_value.playlist_items.return_value = {"items": [{'track': {'id': 2}}]}
-        mock_spotipy.return_value.current_user_top_tracks.return_value = {"items": [{"id": 3}]}
-        yield mock_spotipy.return_value
 
 def test_init():
     topjob = TopPlaylist()
@@ -39,7 +29,16 @@ def test_init():
                             'user-top-read'
                             ]
 
-def test_run(mock_spotipy):
+@patch('spotipy.Spotify')
+@patch('spotipy.oauth2.SpotifyAuthBase')
+def test_run(spotifyOAuth, spotify):
+    spotify.return_value.current_user.return_value = {"id": 1}
+    spotify.return_value.current_user_playlists.return_value = {"items": [{'name': 'orig', 'id': 23}, {'name': 'new', 'id': 24}]}
+    spotify.return_value.playlist_items.return_value = {"items": [{'track': {'id': 2}}]}
+    spotify.return_value.current_user_top_tracks.return_value = {"items": [{"id": 3}]}
+
+    mock_spotipy = spotify.return_value
+
     topjob = TopPlaylist('orig', 'new')
     assert mock_spotipy.current_user.call_count == 0
     assert mock_spotipy.current_user_playlists.call_count == 0

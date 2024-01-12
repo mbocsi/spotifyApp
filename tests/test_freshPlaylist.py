@@ -1,17 +1,7 @@
 from spotify_scripts.freshplaylist import FreshPlaylist
 import pytest
 import datetime
-from unittest.mock import patch, DEFAULT, MagicMock
-
-@pytest.fixture
-def mock_spotipy():
-    with patch('spotipy.Spotify') as mock_spotipy:
-        mock_spotipy.return_value.current_user.return_value = {"id": 1}
-        mock_spotipy.return_value.current_user_playlists.return_value = {"items": [{'name': 'orig', 'id': 23}, {'name': 'new', 'id': 24}]}
-        mock_spotipy.return_value.playlist_items.return_value = {"items": [{'added_at': datetime.datetime.strftime(datetime.datetime.now(datetime.UTC), '%Y-%m-%dT%H:%M:%SZ'), 'track': {'id': 2}}]}
-        yield mock_spotipy.return_value
-
-
+from unittest.mock import patch
 
 def test_init():
     with pytest.raises(TypeError) as excinfo:
@@ -38,8 +28,16 @@ def test_init():
                                 'playlist-modify-private',
                                 'playlist-modify-public',
                                 ]
-    
-def test_run(mock_spotipy):
+
+@patch('spotipy.Spotify')
+@patch('spotipy.oauth2.SpotifyAuthBase')
+def test_run(spotifyOAuth, spotify):
+    spotify.return_value.current_user.return_value = {"id": 1}
+    spotify.return_value.current_user_playlists.return_value = {"items": [{'name': 'orig', 'id': 23}, {'name': 'new', 'id': 24}]}
+    spotify.return_value.playlist_items.return_value = {"items": [{'added_at': datetime.datetime.strftime(datetime.datetime.utcnow(), '%Y-%m-%dT%H:%M:%SZ'), 'track': {'id': 2}}]}
+
+    mock_spotipy=spotify.return_value
+
     freshjob = FreshPlaylist('orig', 'new')
     assert mock_spotipy.current_user.call_count == 0
     assert mock_spotipy.current_user_playlists.call_count == 0
