@@ -1,24 +1,15 @@
 from spotify_scripts.topplaylist import TopPlaylist
 import pytest
-from unittest.mock import patch, DEFAULT
+from unittest.mock import patch
 
 @pytest.fixture
 def mock_spotipy():
-    config = {
-        'current_user': DEFAULT,
-        'current_user_playlists': DEFAULT,
-        'playlist_items': DEFAULT,
-        'playlist_remove_all_occurrences_of_items': DEFAULT,
-        'current_user_top_tracks': DEFAULT,
-        'user_playlist_create': DEFAULT,
-        'playlist_add_items': DEFAULT
-    }
-    with patch.multiple('spotipy.Spotify', **config) as mocked_spotipy:
-        mocked_spotipy['current_user'].return_value = {"id": 1}
-        mocked_spotipy['current_user_playlists'].return_value = {"items": [{'name': 'orig', 'id': 23}, {'name': 'new', 'id': 24}]}
-        mocked_spotipy['playlist_items'].return_value = {"items": [{'track': {'id': 2}}]}
-        mocked_spotipy['current_user_top_tracks'].return_value = {"items": [{"id": 3}]}
-        yield mocked_spotipy
+    with patch('spotipy.Spotify') as mock_spotipy:
+        mock_spotipy.return_value.current_user.return_value = {"id": 1}
+        mock_spotipy.return_value.current_user_playlists.return_value = {"items": [{'name': 'orig', 'id': 23}, {'name': 'new', 'id': 24}]}
+        mock_spotipy.return_value.playlist_items.return_value = {"items": [{'track': {'id': 2}}]}
+        mock_spotipy.return_value.current_user_top_tracks.return_value = {"items": [{"id": 3}]}
+        yield mock_spotipy.return_value
 
 def test_init():
     topjob = TopPlaylist()
@@ -50,18 +41,18 @@ def test_init():
 
 def test_run(mock_spotipy):
     topjob = TopPlaylist('orig', 'new')
-    assert mock_spotipy['current_user'].call_count == 0
-    assert mock_spotipy['current_user_playlists'].call_count == 0
-    assert mock_spotipy['current_user_top_tracks'].call_count == 0
-    assert mock_spotipy['playlist_items'].call_count == 0
-    assert mock_spotipy['user_playlist_create'].call_count == 0
-    assert mock_spotipy['playlist_remove_all_occurrences_of_items'].call_count == 0
-    assert mock_spotipy['playlist_add_items'].call_count == 0
+    assert mock_spotipy.current_user.call_count == 0
+    assert mock_spotipy.current_user_playlists.call_count == 0
+    assert mock_spotipy.current_user_top_tracks.call_count == 0
+    assert mock_spotipy.playlist_items.call_count == 0
+    assert mock_spotipy.user_playlist_create.call_count == 0
+    assert mock_spotipy.playlist_remove_all_occurrences_of_items.call_count == 0
+    assert mock_spotipy.playlist_add_items.call_count == 0
     topjob.run()
-    assert mock_spotipy['current_user'].call_count == 1
-    assert mock_spotipy['current_user_playlists'].call_count == 2
-    assert mock_spotipy['current_user_top_tracks'].call_count == 1
-    assert mock_spotipy['user_playlist_create'].call_count == 1
-    assert mock_spotipy['playlist_items'].call_count == 1
-    assert mock_spotipy['playlist_remove_all_occurrences_of_items'].call_count == 1
-    assert mock_spotipy['playlist_add_items'].call_count == 1
+    assert mock_spotipy.current_user.call_count == 1
+    assert mock_spotipy.current_user_playlists.call_count == 2
+    assert mock_spotipy.current_user_top_tracks.call_count == 1
+    assert mock_spotipy.user_playlist_create.call_count == 1
+    assert mock_spotipy.playlist_items.call_count == 1
+    assert mock_spotipy.playlist_remove_all_occurrences_of_items.call_count == 1
+    assert mock_spotipy.playlist_add_items.call_count == 1
