@@ -30,7 +30,7 @@ def test_init():
                             ]
 
 @patch('spotipy.Spotify')
-@patch('spotipy.oauth2.SpotifyAuthBase')
+@patch('spotipy.oauth2.SpotifyOAuth.__init__', return_value=None)
 def test_run(spotifyOAuth, spotify):
     spotify.return_value.current_user.return_value = {"id": 1}
     spotify.return_value.current_user_playlists.return_value = {"items": [{'name': 'orig', 'id': 23}, {'name': 'new', 'id': 24}]}
