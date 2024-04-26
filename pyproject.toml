@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "spotify_scripts"
-version = "0.1.5"
+version = "0.1.6"
 authors = [{name="Marton Bocsi", email="mvbocsi@gmail.com"}]
 readme = "README.md"
 description="A python application that creates spotify scripts"
