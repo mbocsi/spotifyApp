@@ -63,7 +63,10 @@ def main():
     if "top_playlists" in jobs:
         for top_job in jobs["top_playlists"]:
             playlist = top_job["playlist_name"]
-            time_range = top_job["time_range"]
+            if "time_range" in top_job:
+                time_range = top_job["time_range"]
+            else:
+                time_range = "short_term"
             limit = top_job["limit"]
             app.add_job(TopPlaylist(time_range=time_range, playlist=playlist, limit=limit))
 
